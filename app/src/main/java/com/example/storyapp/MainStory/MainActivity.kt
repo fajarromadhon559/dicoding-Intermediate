@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.storyapp.AddStory.AddStoryActivity
 import com.example.storyapp.Local.SharedPreferences
 import com.example.storyapp.Repo.Result
 import com.example.storyapp.R
@@ -28,11 +29,7 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         listStory()
-        binding.btnAdd.setOnClickListener {
-            Intent(this, StoryDetailActivity::class.java).also {
-                startActivity(it)
-            }
-        }
+
     }
 
     private fun listStory() {
@@ -76,6 +73,11 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.menu_setting -> {
                 Intent(this, SettingActivity::class.java).also {
+                    startActivity(it)
+                }
+            }
+            R.id.menu_add -> {
+                Intent(this, AddStoryActivity::class.java).also {
                     startActivity(it)
                 }
             }

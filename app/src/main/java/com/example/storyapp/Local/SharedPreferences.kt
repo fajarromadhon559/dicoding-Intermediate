@@ -21,6 +21,6 @@ class SharedPreferences (context: Context){
     }
 
     fun getToken(): String {
-        return userSharedPref.getString("token", null).toString()
+        return userSharedPref.getString("token",null).toString()
     }
 }

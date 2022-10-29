@@ -51,12 +51,13 @@ class RegisterActivity : AppCompatActivity() {
                             )
                                 .show()
                             startActivity(Intent(this, LoginActivity::class.java))
+                            finish()
                         }
                         is Result.Error -> {
                             binding.regisProgressBar.gone()
                             Toast.makeText(
                                 this,
-                                "register not success ${result.error}",
+                                "failed register ${result.error}",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
