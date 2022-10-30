@@ -32,6 +32,7 @@
     <string name="text_login">if you don\'t have account,</string>
     <string name="setting">Setting</string>
     <string name="logout">Logout</string>
+    <string name="add">Add Story</string>
 
     <string name="register_title">Let\'s create an account</string>
     <string name="register_message">just the first time using this app? okay, let\'s create an account first</string>

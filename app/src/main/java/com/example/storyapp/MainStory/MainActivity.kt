@@ -11,10 +11,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.storyapp.AddStory.AddStoryActivity
 import com.example.storyapp.Local.SharedPreferences
+import com.example.storyapp.Login.LoginActivity
 import com.example.storyapp.Repo.Result
 import com.example.storyapp.R
-import com.example.storyapp.Register.RegisterActivity
-import com.example.storyapp.Settings.SettingActivity
 import com.example.storyapp.Utils.ViewModelFactory
 import com.example.storyapp.Utils.gone
 import com.example.storyapp.Utils.visible
@@ -71,15 +70,28 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
-            R.id.menu_setting -> {
-                Intent(this, SettingActivity::class.java).also {
-                    startActivity(it)
-                }
-            }
             R.id.menu_add -> {
                 Intent(this, AddStoryActivity::class.java).also {
                     startActivity(it)
                 }
+            }
+            R.id.menu_setting -> {
+                val builder = AlertDialog.Builder(this)
+                builder.setTitle(resources.getString(R.string.caution))
+                builder.setMessage(resources.getString(R.string.To_do))
+                builder.setPositiveButton(resources.getString(R.string.Yes)) { _, _ ->
+                    this.getSharedPreferences("data_user", 0).edit().clear()
+                        .apply()
+                    Intent(this, LoginActivity::class.java).also {
+                        startActivity(it)
+                    }
+                    finish()
+                }
+                builder.setNegativeButton(resources.getString(R.string.No)) { dialog, _ ->
+                    dialog.dismiss()
+                }
+                val alert = builder.create()
+                alert.show()
             }
         }
         return super.onOptionsItemSelected(item)

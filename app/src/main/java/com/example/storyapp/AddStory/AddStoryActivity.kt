@@ -141,7 +141,7 @@ class AddStoryActivity : AppCompatActivity() {
                             }
                             is Result.Error -> {
                                 binding.progressBarUpload.gone()
-                                Toast.makeText(this, "upload failed", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(this, "failed upload ", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }

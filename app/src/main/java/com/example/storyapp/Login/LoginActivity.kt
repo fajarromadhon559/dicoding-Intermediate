@@ -16,13 +16,12 @@ import com.example.storyapp.Utils.*
 import com.example.storyapp.databinding.ActivityLoginBinding
 
 class LoginActivity : AppCompatActivity() {
-    private var _binding: ActivityLoginBinding? = null
-    private val binding get() = _binding!!
+    private lateinit var binding: ActivityLoginBinding
     private lateinit var sharedPref: SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        _binding = ActivityLoginBinding.inflate(layoutInflater)
+        binding = ActivityLoginBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         playAnimation()
@@ -31,9 +30,8 @@ class LoginActivity : AppCompatActivity() {
             login()
         }
         binding.register.setOnClickListener {
-            val intennt = Intent(this@LoginActivity, MainActivity::class.java)
+            val intennt = Intent(this@LoginActivity, RegisterActivity::class.java)
             startActivity(intennt)
-            finish()
         }
     }
 
