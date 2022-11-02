@@ -137,7 +137,9 @@ class AddStoryActivity : AppCompatActivity() {
                                 binding.progressBarUpload.gone()
                                 Toast.makeText(this, "Success Upload story", Toast.LENGTH_SHORT)
                                     .show()
-                                Intent(this, MainActivity::class.java).also { startActivity(it) }
+                                Intent(this, MainActivity::class.java).also { startActivity(it)
+                                }
+                                finish()
                             }
                             is Result.Error -> {
                                 binding.progressBarUpload.gone()
