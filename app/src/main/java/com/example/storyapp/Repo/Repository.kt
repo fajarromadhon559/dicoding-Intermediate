@@ -3,19 +3,25 @@ package com.example.storyapp.Repo
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
-import androidx.lifecycle.map
-import com.example.storyapp.API.ApiService
-import com.example.storyapp.Local.Entity
-import com.example.storyapp.Local.MemberDao
-import com.example.storyapp.Response.LoginResult
-import com.example.storyapp.Response.RegisterResponse
-import com.example.storyapp.Response.UploadDataResponse
+import androidx.paging.*
+import com.example.storyapp.api.ApiService
+import com.example.storyapp.response.LoginResult
+import com.example.storyapp.response.RegisterResponse
+import com.example.storyapp.response.StoryResponseItem
+import com.example.storyapp.response.UploadDataResponse
+import com.example.storyapp.local_data.Entity
+import com.example.storyapp.local_data.LiveDB
+import com.example.storyapp.local_data.remote.StoriesRemoteMedia
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
-import okhttp3.RequestBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import okhttp3.RequestBody.Companion.toRequestBody
+import java.io.File
 
 class Repository private constructor(
     private val apiService: ApiService,
-    private val memberDao: MemberDao
+    private val database: LiveDB
 ) {
     fun register(
         name : String,
@@ -61,62 +67,73 @@ class Repository private constructor(
         }
     }
 
-    fun upLoadStory(
-        token : String,
-        description : RequestBody,
-        file : MultipartBody.Part
+    fun uploadLiveStory(
+        token: String,
+        description: String,
+        file: File
     ): LiveData<Result<UploadDataResponse>> = liveData {
         emit(Result.Loading)
         try {
+            val desc = description.toRequestBody("text/plain".toMediaType())
+            val requestImageFile = file.asRequestBody("image/jpeg".toMediaTypeOrNull())
+            val imageMultipart: MultipartBody.Part = MultipartBody.Part.createFormData(
+                "photo",
+                file.name,
+                requestImageFile
+            )
             val response = apiService.uploadStory(
                 "Bearer $token",
-                description,
-                file
+                desc,
+                imageMultipart
             )
-            if (response.error){
+            if (response.error) {
                 emit(Result.Error(response.message))
-            }
-            else{
+
+            } else {
                 emit(Result.Success(response))
             }
-        }catch (e : Exception){
+        } catch (e: Exception) {
             emit(Result.Error(e.message.toString()))
         }
     }
 
-    fun getListStory(apiKey : String)
-    : LiveData<Result<List<Entity>>> = liveData {
-        try {
-            val response = apiService.getAllListStory("Bearer $apiKey")
-            val stories = response.storyResponseItems
-            val listStory = stories.map { story ->
-                Entity(
-                    story.id,
-                    story.name,
-                    story.description,
-                    story.photoUrl,
-                    story.createdAt
-                )
+    fun getListStoryByMaps(location: Int, token: String): LiveData<Result<List<StoryResponseItem>>> =
+        liveData {
+            emit(Result.Loading)
+            try {
+                val response = apiService.getListStoryByLocation(location, "Bearer $token")
+                if (response.error){
+                    emit(Result.Error(response.message))
+                }else{
+                    emit(Result.Success(response.storyResponseItems))
+                }
+            } catch (e: java.lang.Exception) {
+                Log.d("Signup", e.message.toString())
+                emit(Result.Error(e.message.toString()))
             }
-            memberDao.insertStory(listStory)
-        } catch (e : Exception){
-            Log.d("Repository", "getListStory: ${e.message.toString()} ")
-            emit(Result.Error(e.message.toString()))
         }
-        val localData : LiveData<Result<List<Entity>>>
-        = memberDao.getStory().map { Result.Success(it) }
-        emitSource(localData)
+    fun getStoryList(): LiveData<PagingData<Entity>> {
+        @OptIn(ExperimentalPagingApi::class)
+        return Pager(
+            config = PagingConfig(
+                pageSize = 5
+            ),
+            remoteMediator = StoriesRemoteMedia(database, apiService),
+            pagingSourceFactory = {
+                this.database.storyDao().getStory()
+            }
+        ).liveData
     }
 
-    companion object{
+    companion object {
         @Volatile
-        private var instance : Repository? = null
+        private var instance: Repository? = null
         fun getInstance(
             apiService: ApiService,
-            memberDao: MemberDao
-        ): Repository = instance?: synchronized(this){
-            instance?: Repository(apiService,memberDao)
-        }.also { instance = it }
+            database: LiveDB
+        ): Repository =
+            instance ?: synchronized(this) {
+                instance ?: Repository(apiService, database)
+            }.also { instance = it }
     }
-
 }

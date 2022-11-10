@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".AddStory.AddStoryActivity">
+    tools:context=".addstory.AddStoryActivity">
 
     <ProgressBar
         android:id="@+id/progressBar_Upload"

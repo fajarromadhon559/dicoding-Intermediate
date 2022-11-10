@@ -7,10 +7,11 @@
         android:title="@string/add"
         app:showAsAction="collapseActionView"/>
     <item
-        android:id="@+id/menu_setting"
+        android:id="@+id/map_menu"
+        android:title="@string/menu_maps"
+        app:showAsAction="collapseActionView"/>
+    <item
+        android:id="@+id/logout_menu"
         android:title="@string/logout"
         app:showAsAction="collapseActionView"/>
-
-
-
 </menu>

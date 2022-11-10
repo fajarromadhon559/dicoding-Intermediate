@@ -28,11 +28,14 @@
     <string name="getgallery">getgallery</string>
     <string name="caption">add a caption</string>
     <string name="message_error">upload failed</string>
+    <string name="retry">Retry</string>
 
     <string name="text_login">if you don\'t have account,</string>
     <string name="setting">Setting</string>
     <string name="logout">Logout</string>
+    <string name="menu_maps">Maps</string>
     <string name="add">Add Story</string>
+    <string name="title_maps_story">MapsStory</string>
 
     <string name="register_title">Let\'s create an account</string>
     <string name="register_message">just the first time using this app? okay, let\'s create an account first</string>
