@@ -11,7 +11,7 @@ import com.example.storyapp.response.StoryResponseItem
 import com.example.storyapp.response.UploadDataResponse
 import com.example.storyapp.local_data.Entity
 import com.example.storyapp.local_data.LiveDB
-import com.example.storyapp.local_data.remote.StoriesRemoteMedia
+import com.example.storyapp.local_data.remote.RemoteMediator
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
@@ -118,7 +118,7 @@ class Repository private constructor(
             config = PagingConfig(
                 pageSize = 5
             ),
-            remoteMediator = StoriesRemoteMedia(database, apiService),
+            remoteMediator = RemoteMediator(database, apiService),
             pagingSourceFactory = {
                 this.database.storyDao().getStory()
             }

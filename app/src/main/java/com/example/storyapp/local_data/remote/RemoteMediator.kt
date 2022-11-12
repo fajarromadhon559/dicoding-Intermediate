@@ -12,7 +12,7 @@ import com.example.storyapp.local_data.LiveDB
 import com.example.storyapp.local_data.SharedPreferences
 
 @OptIn(ExperimentalPagingApi::class)
-class StoriesRemoteMedia (
+class RemoteMediator (
     private val database: LiveDB,
     private val apiService: ApiService
 ): RemoteMediator<Int, Entity>()
