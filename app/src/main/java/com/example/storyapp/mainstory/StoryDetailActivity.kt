@@ -23,7 +23,7 @@ class StoryDetailActivity : AppCompatActivity() {
         Glide.with(this)
             .load(detail.photoUrl)
             .into(image)
-        name.text = detail.name
+        binding.tvName.text = detail.name
         description.text = detail.description
     }
 }
