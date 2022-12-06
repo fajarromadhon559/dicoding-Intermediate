@@ -41,8 +41,8 @@ class MainActivity : AppCompatActivity() {
             }
         )
 
-        viewModel.storyList.observe(this) { dayat ->
-            listStoryAdapter.submitData(lifecycle, dayat)
+        viewModel.storyList.observe(this) { listB ->
+            listStoryAdapter.submitData(lifecycle, listB)
         }
     }
     private fun swipeRefreshLayout() {
